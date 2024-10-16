@@ -2,12 +2,12 @@
 
 MenuBarWid::MenuBarWid(QWidget *parent) : QWidget(parent)
 {
-    lb_TotleNum = new QLabel(this);
-    ProgressBar = new QProgressBar(this);
-    ProgressBar->setMinimum(0);
-    ProgressBar->setMaximum(35);
-    ProgressBar->setFormat("%v");
-    ProgressBar->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);  // 对齐方式
+    // lb_TotleNum = new QLabel(this);
+    // ProgressBar = new QProgressBar(this);
+    // ProgressBar->setMinimum(0);
+    // ProgressBar->setMaximum(35);
+    // ProgressBar->setFormat("%v");
+    // ProgressBar->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);  // 对齐方式
     setupUi();
 
 }
@@ -24,7 +24,7 @@ void MenuBarWid::setupUi()
 
    m_bMode = true;
 
-
+/*
    QString s1 = "QProgressBar {\
        border: 2px solid grey;\
        border-radius: 5px;\
@@ -42,7 +42,7 @@ void MenuBarWid::setupUi()
    //       margin: 0.5px;\
 
    ProgressBar->setStyleSheet(s1+s2);
-
+*/
    Init();
 }
 
@@ -99,10 +99,11 @@ void MenuBarWid::Init()
     button_layout->setSpacing(30);
     button_layout->setContentsMargins(50, 0, 0, 0);
 
-
+/*
     QHBoxLayout *count_layout = new QHBoxLayout();
 
     lb_TotleNum->setStyleSheet("color:rgb(255,245,238);font:25px");
+    // lb_TotleNum->setText("共30个检验项目，当前通过项目:");
     lb_TotleNum->setText("共30个检验项目，当前通过项目:");
 //    m_lbTotleNum = new QLabel(this);
 //    m_lbTotleNum->setStyleSheet("color:rgb(255,245,238);font:25px");
@@ -113,7 +114,7 @@ void MenuBarWid::Init()
     count_layout->addWidget(ProgressBar);
     ProgressBar->setValue(0);
 
-
+*/
     m_pMin_button = new PushButton();
     m_pMax_button = new PushButton();
     m_pClose_button = new PushButton();
@@ -129,8 +130,8 @@ void MenuBarWid::Init()
     main_layout->addLayout(title_layout);
     main_layout->addLayout(button_layout);
     main_layout->addStretch();
-    main_layout->addLayout(count_layout);
-    main_layout->addStretch();
+    // main_layout->addLayout(count_layout);
+    // main_layout->addStretch();
 
     main_layout->addWidget(m_pMin_button,0,Qt::AlignCenter);
     main_layout->addWidget(m_pMax_button,0,Qt::AlignCenter);
@@ -142,15 +143,13 @@ void MenuBarWid::Init()
 
 void MenuBarWid::translateLanguage()
 {
-    m_pVersion_title->setText("南都汽车电子--NDC9-2控制器检测");
+    m_pVersion_title->setText("南都拍照系统--河南南都汽车电子有限公司");
     m_pVersion_title->setStyleSheet("color:white;font:25px");
 
     pushButtonGroup->button(0)->setText("主界面");
-    pushButtonGroup->button(1)->setText("设置");
-    pushButtonGroup->button(2)->setText("复位");
-    pushButtonGroup->button(3)->setText("数据接收");
-    pushButtonGroup->button(4)->setText("重启");
-    pushButtonGroup->button(5)->setText("关机");
+    pushButtonGroup->button(1)->setText("重启");
+    pushButtonGroup->button(2)->setText("关机");
+    pushButtonGroup->button(3)->setText("关于");
 
 }
 

@@ -13,12 +13,11 @@
 #include <QDir>
 #include <QProcess>
 //#include <Windows.h>
-#include "dataread.h"
 #include "menubarwid.h"
 #include "ndmassegebox.h"
 #include "ctipareawid.h"
 #include "cstatewid.h"
-#include "mainwidget.h"
+#include "cameraeidget.h"
 
 class NanDuWidget : public QWidget
 {
@@ -36,14 +35,13 @@ private:
     QVBoxLayout *vLayout[12];
     QLabel *pStatus[12];
     QLabel *tName[12];
-    DataRead *w;
     MenuBarWid* m_pMenuBar;
     ndmassegebox *m_ndMsgBox;
     QWidget *m_Darkwidge;
     CTipAreaWid *m_pTipAreaWid;
     CStateWid *m_pStateAreawid;
     QStackedWidget *m_StackedWidget;
-    MainWidget *mainwidget;
+    cameraeidget *camera;
 
 
 signals:

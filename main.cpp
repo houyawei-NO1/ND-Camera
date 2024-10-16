@@ -1,17 +1,14 @@
-#include "dataread.h"
 #include "nanduwidget.h"
 #include <QApplication>
+#include "cameraeidget.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-//    MainWindow w;
-//    w.show();
+    a.setStyle("fusion");
 
      NanDuWidget Widget;
      Widget.show();
-
-
 
     return a.exec();
 }

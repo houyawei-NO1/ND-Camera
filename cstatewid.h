@@ -26,7 +26,8 @@ public slots:
    void click_on_BtnThick();
    void click_on_BtnWaste();
    void click_on_BtnStamp();
-   void status_slot(bool,bool,bool);
+   // void status_slot(bool,bool,bool);
+   void status_slot(bool);
    void DataRec_slot();
 
 private:

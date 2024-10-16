@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui charts
+QT       += multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,8 +27,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    cameraeidget.cpp \
         main.cpp \
-    canthread.cpp \
     nanduwidget.cpp \
     menubarwid.cpp \
     pushbutton.cpp \
@@ -37,16 +38,13 @@ SOURCES += \
     cstatewid.cpp \
     cdoublebutton.cpp \
     clickedlabel.cpp \
-    mainwidget.cpp \
     ledwidget.cpp \
     chartviewwid.cpp \
     resultdialog.cpp \
-    dataread.cpp \
-    datadeal.cpp \
     textwidget.cpp
 
 HEADERS += \
-    canthread.h \
+    cameraeidget.h \
     nanduwidget.h \
     menubarwid.h \
     pushbutton.h \
@@ -56,24 +54,17 @@ HEADERS += \
     cstatewid.h \
     cdoublebutton.h \
     clickedlabel.h \
-    mainwidget.h \
     ledwidget.h \
     chartviewwid.h \
     resultdialog.h \
-    dataread.h \
-    datadeal.h \
     textwidget.h
 
-FORMS += \
-    dataread.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/./ -lControlCAN
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/./ -lControlCAN
 
 INCLUDEPATH += $$PWD/.
 DEPENDPATH += $$PWD/.
