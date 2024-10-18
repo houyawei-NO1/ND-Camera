@@ -16,7 +16,9 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QCameraViewfinderSettings>
-
+#include <QDir>
+#include <QFileDialog>
+#include <QTimer>
 class cameraeidget : public QWidget
 {
     Q_OBJECT
@@ -25,7 +27,7 @@ public:
      explicit cameraeidget(QWidget *parent = nullptr);
      ~cameraeidget();
 
-     bool start();
+     void start();
      bool stop();
      bool isStarted();
      void selectDevice(const QCameraInfo &cameraInfo);
@@ -36,7 +38,9 @@ public:
      int currentScreenHei;//整个主部件区域大小
 
 signals:
-     void send_status(bool);
+    void send_status(bool);
+    void send_log(QString);
+
 private:
     QHBoxLayout *mainLayout;
     QVBoxLayout *operatelLayout;
@@ -51,6 +55,13 @@ private:
     QComboBox *m_gongxu;
     QComboBox *imageCodecBox;
     QComboBox *imageResolutionBox;
+    QLineEdit* lineedit1;
+    QString localPath;
+    QString localPathName;
+    QLineEdit* lineedit2;
+    QString str_gongxu;
+    QString remotepath;
+    QString remotepathname;
 };
 
 #endif // CAMERAEIDGET_H

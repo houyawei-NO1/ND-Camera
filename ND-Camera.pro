@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui charts
+QT       += core gui
 QT       += multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -39,7 +39,6 @@ SOURCES += \
     cdoublebutton.cpp \
     clickedlabel.cpp \
     ledwidget.cpp \
-    chartviewwid.cpp \
     resultdialog.cpp \
     textwidget.cpp
 
@@ -55,7 +54,6 @@ HEADERS += \
     cdoublebutton.h \
     clickedlabel.h \
     ledwidget.h \
-    chartviewwid.h \
     resultdialog.h \
     textwidget.h
 

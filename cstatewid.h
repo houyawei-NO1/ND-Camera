@@ -7,6 +7,7 @@
 #include <QHBoxLayout>
 #include <QTimer>
 #include "cdoublebutton.h"
+#include <QDebug>
 
 
 class CStateWid : public QWidget
@@ -27,7 +28,7 @@ public slots:
    void click_on_BtnWaste();
    void click_on_BtnStamp();
    // void status_slot(bool,bool,bool);
-   void status_slot(bool);
+   void status_slot(bool iSta_Dev);
    void DataRec_slot();
 
 private:

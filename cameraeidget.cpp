@@ -18,31 +18,93 @@ cameraeidget::cameraeidget(QWidget *parent) :
     init();
     selectDevice(QCameraInfo::defaultCamera());
     start();
+    //默认
+    str_gongxu=m_gongxu->currentText();
+    remotepath="//Houyawei-pc/服务器/拍照系统/";
 
     //拍照
     connect(m_paizhao_button,&QPushButton::clicked,this,[ = ]{
-     qDebug() <<m_camera->status();
-    imageCapture->capture();
+    str_gongxu=m_gongxu->currentText();
+    QString dir = localPath + str_gongxu;
+    QDir mDir;
+    if(!mDir.exists(dir))
+    {
+        mDir.mkpath(dir);
+    }
+    QString remotedir = remotepath + str_gongxu;
+    QDir mrDir;
+    if(!mrDir.exists(remotedir))
+    {
+        mrDir.mkpath(remotedir);
+    }
+    localPathName = dir +"/"+ lineedit1->text();
+    remotepathname = remotedir +"/" + lineedit1->text();
+    qDebug()<<localPathName<<endl;
+    qDebug()<<remotepathname<<endl;
+    if (imageCapture->isReadyForCapture()) {
+        imageCapture->capture(localPathName);
+        emit send_log("拍照成功,保存至路径："+localPathName+"."+imageCodecBox->currentText());
+        QTimer::singleShot(0.5 * 1000,this,[=]{
+            imageCapture->capture(remotepathname);
+             // emit send_log("延时拍照至服务器,保存至路径："+remotepathname);
+        });
+    } else {
+        emit send_log("拍照失败,相机没有准备好");
+    }
+
+    lineedit1->clear();
+    activateWindow();
+    lineedit1->setFocus();
+    emit send_status(m_isStarted);
     });
+
     //分辨率
     connect(imageResolutionBox,&QComboBox::currentTextChanged,this,[ = ]{
         QCameraViewfinderSettings set;
         QSize fbl = imageResolutionBox->itemData(imageResolutionBox->currentIndex()).toSize();
         set.setResolution(fbl);
-        qDebug()<<fbl;
         m_camera->setViewfinderSettings(set);
     });
     //图片格式
     connect(imageCodecBox,&QComboBox::currentTextChanged,this,[ = ]{
 
         QImageEncoderSettings settings = imageCapture->encodingSettings();
-        qDebug()<<"setting"<<settings.codec();
-        settings.setCodec(imageCodecBox->itemData(imageCodecBox->currentIndex()).toString());
-        qDebug()<<"setting"<<settings.codec();
+        settings.setCodec(imageCodecBox->currentText());
         imageCapture->setEncodingSettings(settings);
-        imageCapture->capture();
+    });
+    //工序选择
+    connect(m_gongxu,&QComboBox::currentTextChanged,this,[ = ]{
+
+        str_gongxu=m_gongxu->currentText();
+
     });
 
+    //重连相机
+    connect(m_reconnect_button,&QPushButton::clicked,this,[ = ]{
+
+        selectDevice(QCameraInfo::defaultCamera());
+        // start();
+        lineedit1->clear();
+        lineedit1->setFocus();
+
+    });
+    //下载路径选择按钮
+    connect(m_filelocation_button, &QPushButton::clicked, this, [ = ] {
+        QDir dir= QCoreApplication::applicationDirPath();
+        dir.cdUp();
+        localPath = dir.path();
+        localPath = QFileDialog::getExistingDirectory(this, tr("选择下载路径"),
+                                                     localPath,
+                                                     QFileDialog::ShowDirsOnly
+                                                    | QFileDialog::DontResolveSymlinks);
+        lineedit2->setText(localPath);
+    });
+    //扫码枪输入自动对焦
+    QTimer::singleShot(5 * 1000,this,[=]{
+        activateWindow();
+        lineedit1->setFocus();
+        emit send_status(m_isStarted);
+    });
 
 }
 cameraeidget::~cameraeidget()
@@ -65,11 +127,11 @@ void cameraeidget::selectDevice(const QCameraInfo &cameraInfo)
     m_camera = new QCamera(m_curCameraInfo);
     m_camera->setViewfinder(m_viewfinder);
 
-
     if (restart)//首次启动没有重连
         start();
+
 }
-bool cameraeidget::start()
+void cameraeidget::start()
 {
     if (! m_isStarted) {
         m_isStarted = true;
@@ -81,15 +143,15 @@ bool cameraeidget::start()
         //     qDebug() << "连接相机数量："<< curCameraInfoList.count();
         //     qDebug() << "相机名称："<< curCameraInfoList.at(i).deviceName();
         // }
-
         imageCapture = new QCameraImageCapture(m_camera);
         const QStringList supportedImageCodecs = imageCapture->supportedImageCodecs();
+        imageCodecBox->clear();
         for (const QString &codecName : supportedImageCodecs) {
             QString description = imageCapture->imageCodecDescription(codecName);
             imageCodecBox->addItem(codecName , QVariant(codecName));
-             qDebug() << "支持编码格式："<< QVariant(codecName)<<"description"<<description;
+             // qDebug() << "支持编码格式："<< QVariant(codecName)<<"description"<<description;
         }
-
+        imageCodecBox->setCurrentIndex(5);
 
         QCameraViewfinderSettings set;
         set.setResolution(1920,1080);
@@ -97,23 +159,22 @@ bool cameraeidget::start()
         qDebug() <<m_camera->status();
         // m_camera->setCaptureMode(QCamera::CaptureStillImage);
 
+        imageResolutionBox->clear();
         const QList<QSize> supportedResolutions = imageCapture->supportedResolutions();
         for (const QSize &resolution : supportedResolutions) {
             imageResolutionBox->addItem(QString("%1x%2").arg(resolution.width()).arg(resolution.height()),
                                             QVariant(resolution));
             // qDebug() << "支持分辨率："<<QString("%1x%2").arg(resolution.width()).arg(resolution.height())<<endl;
         }
-
-        if (imageCapture->isReadyForCapture()) {
-            imageCapture->capture();
-        } else {
-            qWarning() << "Camera not ready for capture";
-        }
+        imageResolutionBox->setCurrentIndex(2);
 
     }
 
-    emit send_status(m_isStarted);
-    return true;
+
+    QTimer::singleShot(2 * 1000,this,[=]{
+        emit send_status(m_isStarted);
+    });
+
 }
 
 bool cameraeidget::stop()
@@ -123,7 +184,7 @@ bool cameraeidget::stop()
 
         m_camera->stop();
     }
-
+    emit send_status(m_isStarted);
     return true;
 }
 
@@ -161,10 +222,10 @@ void cameraeidget::init()
     paizhao_button_layout->addWidget(m_paizhao_button);
     paizhao_button_layout->addStretch();
 
-    QLabel* String1 = new QLabel();
+    QLabel *String1 = new QLabel();
     String1->setText("①二维码ID:");
     String1->setStyleSheet("color:rgb(255,245,238);font:25px");
-    QLineEdit* lineedit1 = new QLineEdit();
+    lineedit1 = new QLineEdit();
     lineedit1->setStyleSheet("color:rgb(43,48,70);font:25px;background-color:rgb(255,245,238)");
     paizhao_line1_layout->addWidget(String1);
     paizhao_line1_layout->addWidget(lineedit1);
@@ -228,7 +289,7 @@ void cameraeidget::init()
     QLabel* String5 = new QLabel();
     String5->setText("①目录:");
     String5->setStyleSheet("color:rgb(255,245,238);font:25px");
-    QLineEdit* lineedit2 = new QLineEdit();
+    lineedit2 = new QLineEdit();
     lineedit2->setStyleSheet("color:rgb(43,48,70);font:25px;background-color:rgb(255,245,238)");
     m_filelocation_button = new QPushButton(peizhi);
     m_filelocation_button->setFixedSize(50,30);
@@ -257,7 +318,6 @@ void cameraeidget::init()
     String7->setText("③格式:");
     String7->setStyleSheet("color:rgb(255,245,238);font:25px");
     imageCodecBox = new QComboBox(peizhi);
-    imageCodecBox->addItem(tr("默认"), QVariant(QString()));
     imageCodecBox->setStyleSheet("QComboBox{border-radius:100px;background-color:#1a67c0;color:rgb(255,245,238);font:25px;}");
     peizhi_line4_layout->addWidget(String7);
     peizhi_line4_layout->addWidget(imageCodecBox);
@@ -266,7 +326,6 @@ void cameraeidget::init()
     String8->setText("④分辨率:");
     String8->setStyleSheet("color:rgb(255,245,238);font:25px");
     imageResolutionBox = new QComboBox(peizhi);
-    imageResolutionBox->addItem(tr("1920x1080"));
     imageResolutionBox->setStyleSheet("QComboBox{border-radius:100px;background-color:#1a67c0;color:rgb(255,245,238);font:25px;}");
     peizhi_line5_layout->addWidget(String8);
     peizhi_line5_layout->addWidget(imageResolutionBox);

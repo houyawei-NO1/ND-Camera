@@ -154,6 +154,7 @@ void CStateWid::DataRec_slot()
 
 void CStateWid::status_slot(bool iSta_Dev)
 {
+    qDebug()<<"status_slot";
     if(iSta_Dev == true)
     {
         m_color_sortOne->setStyleSheet("border-radius:8px;background-color:rgb(67,207,124)");

@@ -27,7 +27,7 @@ void CTipAreaWid::Init()
 
     //this->setLayout(pLay);
     setWindowFlags(Qt::FramelessWindowHint);
-    m_StatusTextBrowser->setStyleSheet("border:0px;color:white");
+    m_StatusTextBrowser->setStyleSheet("border:0px;color:white;font:20px");
     m_StatusTextBrowser->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_StatusTextBrowser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_StatusTextBrowser->setVisible(true);
@@ -43,13 +43,15 @@ void CTipAreaWid::Init()
 
 void CTipAreaWid::slotStatusNotify(QString strInfo)
 {
-    QString strInfo1 = QString::fromLocal8Bit(strInfo.toLatin1().data());
-    m_StatusTextBrowser->append(strInfo1);
+    // QString strInfo1 = QString::fromLocal8Bit(strInfo.toLatin1().data());
+    // m_StatusTextBrowser->append(strInfo1);
 
 
-    QTextCursor text_cursor(m_StatusTextBrowser->textCursor());//设置光标的位置
-    text_cursor.movePosition(QTextCursor::End);
-    m_StatusTextBrowser->setTextCursor(text_cursor);
+    // QTextCursor text_cursor(m_StatusTextBrowser->textCursor());//设置光标的位置
+    // text_cursor.movePosition(QTextCursor::End);
+    // m_StatusTextBrowser->setTextCursor(text_cursor);
+    m_StatusTextBrowser->setText(strInfo);
+
 }
 
 void CTipAreaWid::timerUpdate()

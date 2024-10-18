@@ -28,11 +28,13 @@ NanDuWidget::NanDuWidget(QWidget *parent) : QWidget(parent)
     //状态栏
     // connect(w, SIGNAL(status_send(bool,bool,bool)), m_pStateAreawid, SLOT(status_slot(bool,bool,bool)),Qt::QueuedConnection);
     // connect(w, SIGNAL(DataRec_sta()), m_pStateAreawid, SLOT(DataRec_slot()),Qt::QueuedConnection);
-    // //结果窗口
 
 
-    // //自动连接
-    // w->ConnectDev();
+    //相机状态
+    connect(camera,SIGNAL(send_status(bool)),m_pStateAreawid, SLOT(status_slot(bool)),Qt::QueuedConnection);
+
+    //log打印
+    connect(camera,SIGNAL(send_log(QString)),m_pTipAreaWid, SLOT(slotStatusNotify(QString)),Qt::QueuedConnection);
 
 }
 void NanDuWidget::setupUi()
