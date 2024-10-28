@@ -143,7 +143,7 @@ void NanDuWidget::SelectButton(int iCurSelectNum)
         //关于弹框
         m_Darkwidge->show();
         m_ndMsgBox->setVisible(true);
-        m_ndMsgBox->setType(1);
+        m_ndMsgBox->setType(2);
         m_ndMsgBox->setLabelText(tr("南都拍照系统"),tr("河南南都汽车电子有限公司\n"
                                                         "南都拍照系统\n"
                                                         "河南省南阳市卧龙区王村乡淯龙光电产业园\n"
