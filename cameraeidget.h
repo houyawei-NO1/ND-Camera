@@ -19,6 +19,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QTimer>
+#include "QZXing.h"
 class cameraeidget : public QWidget
 {
     Q_OBJECT
@@ -50,6 +51,7 @@ private:
     QCameraInfo        m_curCameraInfo;
     QCameraImageCapture *imageCapture;
     QPushButton* m_paizhao_button;
+    QPushButton* m_clean_button;
     QPushButton* m_reconnect_button;
     QPushButton* m_filelocation_button;
     QComboBox *m_gongxu;
@@ -62,6 +64,10 @@ private:
     QString str_gongxu;
     QString remotepath;
     QString remotepathname;
+
+    QPushButton* m_shibie_button;
+    QPushButton* m_amian_button;
+    QPushButton* m_bmian_button;
 };
 
 #endif // CAMERAEIDGET_H

@@ -73,4 +73,4 @@ RESOURCES += \
 DISTFILES += \
     logo.rc
 
-
+include(QZXing/QZXing.pri)

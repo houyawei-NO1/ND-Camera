@@ -58,6 +58,46 @@ cameraeidget::cameraeidget(QWidget *parent) :
     emit send_status(m_isStarted);
     });
 
+    //识别
+    connect(m_shibie_button,&QPushButton::clicked,this,[ = ]{
+
+    if (imageCapture->isReadyForCapture()) {
+        imageCapture->capture("D:/cache.jpg");
+        emit send_log("拍照成功,保存至路径：D:/cache.jpg");
+
+        QTimer::singleShot(2 * 1000,this,[=]{
+        QZXing decoder;
+        QImage imageToDecode("D:/cache.jpg");
+        decoder.setDecoder(QZXing::DecoderFormat_QR_CODE );
+        // decoder.setTryHarderBehaviour(QZXing::TryHarderBehaviour_ThoroughScanning | QZXing::TryHarderBehaviour_Rotate);
+        decoder.setSourceFilterType(QZXing::SourceFilter_ImageNormal| QZXing::SourceFilter_ImageInverted);
+        QString result=decoder.decodeImage(imageToDecode);
+        lineedit1->setText(result);
+        if(result.isEmpty()) emit send_log("未识别到二维码");
+        else emit send_log("二维码识别结果:"+result);
+        });
+
+    } else {
+        emit send_log("识别失败,相机没有准备好");
+    }
+
+    });
+
+    //清除ID
+    connect(m_clean_button,&QPushButton::clicked,this,[ = ]{
+        lineedit1->clear();
+    });
+
+    //A面
+    connect(m_amian_button,&QPushButton::clicked,this,[ = ]{
+        lineedit1->insert("A面");
+    });
+
+    //B面
+    connect(m_bmian_button,&QPushButton::clicked,this,[ = ]{
+        lineedit1->insert("B面");
+    });
+
     //分辨率
     connect(imageResolutionBox,&QComboBox::currentTextChanged,this,[ = ]{
         QCameraViewfinderSettings set;
@@ -195,6 +235,7 @@ bool cameraeidget::isStarted()
 
 void cameraeidget::init()
 {
+    localPath="D:/";
     auto mainLayout = new QHBoxLayout(this);
     m_viewfinder = new QCameraViewfinder(this);
     m_viewfinder->setStyleSheet("border-radius: 20px;background-color:rgb(43,48,70)");
@@ -210,6 +251,7 @@ void cameraeidget::init()
     auto paizhao_line1_layout = new QHBoxLayout();
     auto paizhao_line2_layout = new QHBoxLayout();
     auto paizhao_line3_layout = new QHBoxLayout();
+    auto paizhao_line4_layout = new QHBoxLayout();
 
     m_paizhao_button = new QPushButton(caozuo);
     m_paizhao_button->setFixedSize(200,200);
@@ -227,8 +269,16 @@ void cameraeidget::init()
     String1->setStyleSheet("color:rgb(255,245,238);font:25px");
     lineedit1 = new QLineEdit();
     lineedit1->setStyleSheet("color:rgb(43,48,70);font:25px;background-color:rgb(255,245,238)");
+    m_clean_button = new QPushButton(this);
+    m_clean_button->setFixedSize(30,30);
+    m_clean_button->setText("X");
+    m_clean_button->setStyleSheet("QPushButton:hover{border-radius:100px;background-color:rgb(67,207,124);color:rgb(255,245,238);font:25px;}\
+                       QPushButton:pressed{border-radius:100px;background-color:#1a67c0;color:rgb(255,245,238);font:25px;}\
+                                     QPushButton{border-radius:100px;background-color:#1a67c0;color:rgb(255,245,238);font:25px;}");
+    m_clean_button->setFocusPolicy(Qt::NoFocus);
     paizhao_line1_layout->addWidget(String1);
     paizhao_line1_layout->addWidget(lineedit1);
+    paizhao_line1_layout->addWidget(m_clean_button);
 
     QLabel* String2 = new QLabel();
     String2->setText("②本地保存:");
@@ -253,11 +303,36 @@ void cameraeidget::init()
     paizhao_line3_layout->addWidget(fuwuqi);
     paizhao_line3_layout->addStretch();
 
+    m_shibie_button = new QPushButton(this);
+    m_shibie_button->setFixedSize(70,40);
+    m_shibie_button->setText("识别");
+    m_shibie_button->setStyleSheet("QPushButton:hover{border-radius:100px;background-color:rgb(67,207,124);color:rgb(255,245,238);font:25px;}\
+                             QPushButton:pressed{border-radius:100px;background-color:#1a67c0;color:rgb(255,245,238);font:25px;}\
+                                           QPushButton{border-radius:100px;background-color:#1a67c0;color:rgb(255,245,238);font:25px;}");
+    m_shibie_button->setFocusPolicy(Qt::NoFocus);
+    m_amian_button = new QPushButton(this);
+    m_amian_button->setFixedSize(70,40);
+    m_amian_button->setText("A面");
+    m_amian_button->setStyleSheet("QPushButton:hover{border-radius:100px;background-color:rgb(67,207,124);color:rgb(255,245,238);font:25px;}\
+                             QPushButton:pressed{border-radius:100px;background-color:#1a67c0;color:rgb(255,245,238);font:25px;}\
+                                           QPushButton{border-radius:100px;background-color:#1a67c0;color:rgb(255,245,238);font:25px;}");
+    m_amian_button->setFocusPolicy(Qt::NoFocus);
+    m_bmian_button = new QPushButton(this);
+    m_bmian_button->setFixedSize(70,40);
+    m_bmian_button->setText("B面");
+    m_bmian_button->setStyleSheet("QPushButton:hover{border-radius:100px;background-color:rgb(67,207,124);color:rgb(255,245,238);font:25px;}\
+                             QPushButton:pressed{border-radius:100px;background-color:#1a67c0;color:rgb(255,245,238);font:25px;}\
+                                           QPushButton{border-radius:100px;background-color:#1a67c0;color:rgb(255,245,238);font:25px;}");
+    m_bmian_button->setFocusPolicy(Qt::NoFocus);
+    paizhao_line4_layout->addWidget(m_shibie_button);
+    paizhao_line4_layout->addWidget(m_amian_button);
+    paizhao_line4_layout->addWidget(m_bmian_button);
 
     caozuolayout->addLayout(paizhao_button_layout);
     caozuolayout->addLayout(paizhao_line1_layout);
     caozuolayout->addLayout(paizhao_line2_layout);
     caozuolayout->addLayout(paizhao_line3_layout);
+    caozuolayout->addLayout(paizhao_line4_layout);
 
     QWidget* black2 = new QWidget(this);
     black2->setStyleSheet("border-radius: 20px;background-color:rgb(black)");
@@ -291,6 +366,7 @@ void cameraeidget::init()
     String5->setStyleSheet("color:rgb(255,245,238);font:25px");
     lineedit2 = new QLineEdit();
     lineedit2->setStyleSheet("color:rgb(43,48,70);font:25px;background-color:rgb(255,245,238)");
+    lineedit2->setText(localPath);
     m_filelocation_button = new QPushButton(peizhi);
     m_filelocation_button->setFixedSize(50,30);
     m_filelocation_button->setText("选择");
