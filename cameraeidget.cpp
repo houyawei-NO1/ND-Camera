@@ -265,7 +265,7 @@ void cameraeidget::init()
     paizhao_button_layout->addStretch();
 
     QLabel *String1 = new QLabel();
-    String1->setText("①二维码ID:");
+    String1->setText("ID:");
     String1->setStyleSheet("color:rgb(255,245,238);font:25px");
     lineedit1 = new QLineEdit();
     lineedit1->setStyleSheet("color:rgb(43,48,70);font:25px;background-color:rgb(255,245,238)");
@@ -281,7 +281,7 @@ void cameraeidget::init()
     paizhao_line1_layout->addWidget(m_clean_button);
 
     QLabel* String2 = new QLabel();
-    String2->setText("②本地保存:");
+    String2->setText("本地保存:");
     String2->setStyleSheet("color:rgb(255,245,238);font:25px");
     QCheckBox* bendi = new QCheckBox();
     bendi->setStyleSheet("QCheckBox{ background-color: rgb(255,245,238);color: #1a67c0;border-radius: 0px;}\
@@ -293,7 +293,7 @@ void cameraeidget::init()
     paizhao_line2_layout->addStretch();
 
     QLabel* String3 = new QLabel();
-    String3->setText("③服务器:");
+    String3->setText("服务器:");
     String3->setStyleSheet("color:rgb(255,245,238);font:25px");
     QCheckBox* fuwuqi = new QCheckBox();
     fuwuqi->setStyleSheet("QCheckBox{ background-color: rgb(255,245,238);color: #1a67c0;border-radius: 0px;}\
