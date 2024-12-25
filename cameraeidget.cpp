@@ -24,6 +24,11 @@ cameraeidget::cameraeidget(QWidget *parent) :
 
     //拍照
     connect(m_paizhao_button,&QPushButton::clicked,this,[ = ]{
+    // effect.setSource(QUrl::fromLocalFile(":/sound/1.wav"));//拍照提示
+    // effect.setLoopCount(1);
+    // effect.setVolume(1);
+    // effect.play();
+    QSound::play(":/sound/1.wav");
     str_gongxu=m_gongxu->currentText();
     QString dir = localPath + str_gongxu;
     QDir mDir;

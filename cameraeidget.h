@@ -19,7 +19,10 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QTimer>
+//#include <QSoundEffect>
+#include <QSound>
 #include "QZXing.h"
+#include "qsoundeffect.h"
 class cameraeidget : public QWidget
 {
     Q_OBJECT
@@ -37,6 +40,7 @@ public:
 
      int currentScreenWid;//整个主部件区域大小
      int currentScreenHei;//整个主部件区域大小
+     // QSoundEffect effect;
 
 signals:
     void send_status(bool);

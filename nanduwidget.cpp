@@ -5,6 +5,12 @@ NanDuWidget::NanDuWidget(QWidget *parent) : QWidget(parent)
 
     setupUi();
 
+    // effect.setSource(QUrl::fromLocalFile(":/sound/0.wav"));//开机
+    // effect.setLoopCount(1);
+    // effect.setVolume(1);
+    // effect.play();
+
+    QSound::play(":/sound/0.wav");
 
 
     // //功能状态

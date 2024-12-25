@@ -12,6 +12,8 @@
 #include <QStackedWidget>
 #include <QDir>
 #include <QProcess>
+// #include <QSoundEffect>
+#include <QSound>
 //#include <Windows.h>
 #include "menubarwid.h"
 #include "ndmassegebox.h"
@@ -28,6 +30,7 @@ public:
     void setupUi();
     void Reset();
     void reboot();
+    // QSoundEffect effect;
 
 private:
     QWidget *widget=new QWidget(this);

@@ -11,4 +11,8 @@
         <file>logo.png</file>
         <file>logo.ico</file>
     </qresource>
+    <qresource prefix="/sound">
+        <file>0.wav</file>
+        <file>1.wav</file>
+    </qresource>
 </RCC>
